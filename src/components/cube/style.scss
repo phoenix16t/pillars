@@ -1,0 +1,30 @@
+.cube {
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  width: 100%;
+
+  .face {
+    border: 1px solid black;
+  }
+
+  .down,
+  .left,
+  .right,
+  .top,
+  .up {
+    bottom: 0;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+
+  .right {
+    left: initial;
+  }
+
+  .down {
+    top: initial;
+  }
+}

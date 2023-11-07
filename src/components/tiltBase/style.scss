@@ -1,0 +1,12 @@
+.tilt-base {
+  // width: 50%;
+  // transform: rotateX(60deg);
+  // transform: rotateX(60deg) rotateZ(-30deg);
+
+  backface-visibility: visible;
+  transform-style: preserve-3d;
+
+  border: 1px solid red;
+  height: 500px;
+  width: 500px;
+}
