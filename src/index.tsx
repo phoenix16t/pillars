@@ -2,7 +2,7 @@ import { StrictMode, useCallback, useMemo, useState } from "react";
 import ReactDOM from "react-dom/client";
 import throttle from "lodash/throttle";
 
-import { Cube, TiltBase } from "./components";
+import { Cube, TiltBase } from "components";
 
 import "./style.scss";
 
@@ -54,11 +54,23 @@ const App = ({
     };
   }, [horizontalCount, pillarPadding, verticalCount]);
 
+  const handleMouseDown = useCallback(
+    ({ clientX, clientY }: { clientX: number; clientY: number }) => {
+      setIsMouseClicked(true);
+      handleMouseMove({ clientX, clientY });
+    },
+    [handleMouseMove],
+  );
+
+  const handleMouseUp = useCallback(() => {
+    setIsMouseClicked(false);
+  }, []);
+
   return (
     <div
       className="app"
-      onMouseDown={() => setIsMouseClicked(true)}
-      onMouseUp={() => setIsMouseClicked(false)}
+      onMouseDown={handleMouseDown}
+      onMouseUp={handleMouseUp}
       onMouseMove={debouncedMouseHandler}
     >
       <TiltBase
@@ -69,18 +81,16 @@ const App = ({
       >
         <>
           {Array.from(Array(verticalCount).keys()).map((y) =>
-            Array.from(Array(horizontalCount).keys()).map((x) => {
-              return (
-                <li key={`${x}-${y}`} style={cubeWrapperStyle}>
-                  <Cube
-                    detectionRadius={detectionRadius}
-                    isMouseClicked={isMouseClicked}
-                    maxPillarHeight={maxPillarHeight}
-                    mousePosition={mousePosition}
-                  />
-                </li>
-              );
-            }),
+            Array.from(Array(horizontalCount).keys()).map((x) => (
+              <li key={`${x}-${y}`} style={cubeWrapperStyle}>
+                <Cube
+                  detectionRadius={detectionRadius}
+                  isMouseClicked={isMouseClicked}
+                  maxPillarHeight={maxPillarHeight}
+                  mousePosition={mousePosition}
+                />
+              </li>
+            )),
           )}
         </>
       </TiltBase>

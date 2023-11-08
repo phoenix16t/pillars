@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
-import { MousePosition } from "../../types";
+
+import { MousePosition } from "types";
+
 import "./style.scss";
 
 export const TiltBase = ({
@@ -17,7 +19,10 @@ export const TiltBase = ({
 }) => {
   const [isHoldingMouse, setIsHoldingMouse] = useState(false);
   const [baseRotationSnap, setBaseRotationSnap] = useState({ x: 0, y: 0 });
-  const [mousePositionSnap, setMousePositionSnap] = useState({ x: 0, y: 0 });
+  const [mousePositionSnap, setMousePositionSnap] = useState({
+    x: mousePosition.x,
+    y: mousePosition.y,
+  });
 
   const baseRotation = useMemo(() => {
     const x = isHoldingMouse ? mousePositionSnap.x - mousePosition.x : 0;

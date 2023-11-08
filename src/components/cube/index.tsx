@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { MousePosition, Sides } from "../../types";
+
+import { MousePosition, Sides } from "types";
 import { useStyle } from "./useStyles";
+
 import "./style.scss";
 
 export const Cube = ({
