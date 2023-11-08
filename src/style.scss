@@ -6,32 +6,27 @@
 
 html,
 body,
-#root {
+#root,
+.app {
   height: 100%;
   width: 100%;
 }
 
 li {
-  padding: 10px;
   transform-style: preserve-3d;
 }
 
 ul {
-  list-style: none;
-  /* margin: 0;
-  padding: 0; */
-
   display: flex;
   flex-wrap: wrap;
+  list-style: none;
 }
 
 .app {
   align-items: center;
   display: flex;
-  height: 100%;
   justify-content: center;
   margin: 0;
   padding: 0;
   perspective: 1000px;
-  width: 100%;
 }

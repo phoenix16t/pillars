@@ -1,10 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
+import { MousePosition } from "../../types";
 import "./style.scss";
-
-type MousePosition = {
-  x: number;
-  y: number;
-};
 
 export const TiltBase = ({
   children,
@@ -24,13 +20,13 @@ export const TiltBase = ({
   const [mousePositionSnap, setMousePositionSnap] = useState({ x: 0, y: 0 });
 
   const baseRotation = useMemo(() => {
-    let x = baseRotationSnap.x;
-    let y = baseRotationSnap.y;
-    if (isHoldingMouse) {
-      x += mousePositionSnap.x - mousePosition.x;
-      y += mousePositionSnap.y - mousePosition.y;
-    }
-    return { x, y };
+    const x = isHoldingMouse ? mousePositionSnap.x - mousePosition.x : 0;
+    const y = isHoldingMouse ? mousePositionSnap.y - mousePosition.y : 0;
+
+    return {
+      x: x + baseRotationSnap.x,
+      y: y + baseRotationSnap.y,
+    };
   }, [baseRotationSnap, isHoldingMouse, mousePosition, mousePositionSnap]);
 
   const rotationString = useMemo(() => {
@@ -57,22 +53,6 @@ export const TiltBase = ({
       }}
     >
       {children}
-      {/* tilt<br></br>base<br></br>
-      height - {height}
-      <br></br>
-      width - {width}
-      <br></br>
-      isMouseClicked - {isMouseClicked}
-      <br></br>
-      mousePosition.x - {mousePosition.x}
-      <br></br>
-      baseRotationSnap.x - {baseRotationSnap.x}
-      <br></br>
-      mousePositionSnap.x - {mousePositionSnap.x}
-      <br></br> */}
-      {/* baserotation - {baseRotation.x} */}
-      {/* <br></br>
-      ttttt - {rotationString} */}
     </ul>
   );
 };

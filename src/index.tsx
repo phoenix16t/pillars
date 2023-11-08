@@ -1,11 +1,4 @@
-import {
-  StrictMode,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { StrictMode, useCallback, useMemo, useState } from "react";
 import ReactDOM from "react-dom/client";
 import throttle from "lodash/throttle";
 
@@ -17,20 +10,23 @@ const App = ({
   baseHeight,
   baseWidth,
   delay,
+  detectionRadius,
   horizontalCount,
+  maxPillarHeight,
+  pillarPadding,
   verticalCount,
 }: {
   baseHeight: number;
   baseWidth: number;
   delay: number;
+  detectionRadius: number;
   horizontalCount: number;
+  maxPillarHeight: number;
+  pillarPadding: number;
   verticalCount: number;
 }) => {
   const [isMouseClicked, setIsMouseClicked] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const refs = useRef<HTMLDivElement[]>([]);
-
-  // console.log("refs", refs.current[0]?.getBoundingClientRect());
 
   const handleMouseMove = useCallback(
     ({ clientX, clientY }: { clientX: number; clientY: number }) => {
@@ -48,42 +44,13 @@ const App = ({
     [handleMouseMove, mouseDetectionRate],
   );
 
-  const cubeStyle = useMemo(() => {
+  const cubeWrapperStyle = useMemo(() => {
     return {
       height: `${100 / verticalCount}%`,
+      padding: `${pillarPadding}px`,
       width: `${100 / horizontalCount}%`,
     };
-  }, [horizontalCount, verticalCount]);
-
-  const pillarCoordinates = useMemo(() => {
-    if (!isMouseClicked) {
-      return refs.current.map((ref) => {
-        const obj = ref.getBoundingClientRect();
-        return {
-          x: obj.x + obj.width / 2,
-          y: obj.y + obj.height / 2,
-        };
-      });
-    }
-  }, [isMouseClicked]);
-
-  console.log("pillarCoordinates", pillarCoordinates);
-
-  console.log("refs", refs);
-
-  useEffect(() => {
-    // if (!isMouseClicked) {
-    const blah = refs.current.map((ref) => {
-      const obj = ref.getBoundingClientRect();
-      return {
-        x: obj.x + obj.width / 2,
-        y: obj.y + obj.height / 2,
-      };
-    });
-
-    console.log("blah", blah);
-    // }
-  }, []);
+  }, [horizontalCount, pillarPadding, verticalCount]);
 
   return (
     <div
@@ -101,18 +68,14 @@ const App = ({
         <>
           {Array.from(Array(verticalCount).keys()).map((y) =>
             Array.from(Array(horizontalCount).keys()).map((x) => {
-              // console.log("y", y);
-              // console.log("x", x);
-              const index = y * horizontalCount + x;
-              const percentage = 10;
-
               return (
-                <li key={index} style={cubeStyle}>
+                <li key={`${x}-${y}`} style={cubeWrapperStyle}>
                   <Cube
-                    ref={(el: HTMLDivElement) => (refs.current[index] = el)}
-                    percentage={percentage}
+                    detectionRadius={detectionRadius}
+                    isMouseClicked={isMouseClicked}
+                    maxPillarHeight={maxPillarHeight}
+                    mousePosition={mousePosition}
                   />
-                  {index}
                 </li>
               );
             }),
@@ -132,8 +95,11 @@ root.render(
       baseHeight={500}
       baseWidth={500}
       delay={100}
+      detectionRadius={500}
       horizontalCount={5}
-      verticalCount={7}
+      maxPillarHeight={200}
+      pillarPadding={10}
+      verticalCount={5}
     />
   </StrictMode>,
 );
