@@ -1,14 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { MousePosition } from "../../types";
+import { MousePosition, Sides } from "../../types";
+import { useStyle } from "./useStyles";
 import "./style.scss";
-
-enum Sides {
-  down,
-  left,
-  right,
-  top,
-  up,
-}
 
 export const Cube = ({
   detectionRadius,
@@ -48,60 +41,7 @@ export const Cube = ({
     return 0;
   }, [coordinates, detectionRadius, isMouseClicked, mousePosition]);
 
-  const height = useMemo(
-    () => percentage * maxPillarHeight,
-    [maxPillarHeight, percentage],
-  );
-
-  const translate = useMemo(() => `translateZ(${height / 2}px)`, [height]);
-
-  const colorStyle = useMemo(() => {
-    const value = Math.round(255 * percentage);
-
-    let backgroundColor;
-    if (percentage < 1 / 3) {
-      backgroundColor = `rgb(255, 255, ${255 - value * 3})`;
-    } else if (percentage < 2 / 3) {
-      backgroundColor = `rgb(255, ${255 - (value - 85)}, 0)`;
-    } else {
-      backgroundColor = `rgb(255, ${170 - (value - 170) * 2}, 0)`;
-    }
-
-    return { backgroundColor };
-  }, [percentage]);
-
-  const topStyle = useMemo(() => {
-    return {
-      ...colorStyle,
-      transform: `translateZ(${height}px)`,
-    };
-  }, [colorStyle, height]);
-
-  const upDownStyle = useMemo(() => {
-    return {
-      ...colorStyle,
-      height: `${height}px`,
-      transform: `${translate} rotateX(-90deg)`,
-    };
-  }, [colorStyle, height, translate]);
-
-  const leftRightStyle = useMemo(() => {
-    return {
-      ...colorStyle,
-      width: `${height}px`,
-      transform: `${translate} rotateY(-90deg)`,
-    };
-  }, [colorStyle, height, translate]);
-
-  const combinedStyles = useMemo(() => {
-    return {
-      [Sides.top]: { ...topStyle },
-      [Sides.up]: { ...upDownStyle, top: `-${height / 2}px` },
-      [Sides.down]: { ...upDownStyle, bottom: `-${height / 2}px` },
-      [Sides.left]: { ...leftRightStyle, left: `-${height / 2}px` },
-      [Sides.right]: { ...leftRightStyle, right: `-${height / 2}px` },
-    };
-  }, [height, leftRightStyle, topStyle, upDownStyle]);
+  const { combinedStyles } = useStyle({ maxPillarHeight, percentage });
 
   // note: this useEffect ensures that ref.current is populated before
   // the memos kick off

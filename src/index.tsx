@@ -6,11 +6,13 @@ import { Cube, TiltBase } from "./components";
 
 import "./style.scss";
 
+const TILT_BASE_DETECTION_RATE = 100;
+
 const App = ({
   baseHeight,
   baseWidth,
-  delay,
   detectionRadius,
+  detectionRate,
   horizontalCount,
   maxPillarHeight,
   pillarPadding,
@@ -18,8 +20,8 @@ const App = ({
 }: {
   baseHeight: number;
   baseWidth: number;
-  delay: number;
   detectionRadius: number;
+  detectionRate: number;
   horizontalCount: number;
   maxPillarHeight: number;
   pillarPadding: number;
@@ -36,8 +38,8 @@ const App = ({
   );
 
   const mouseDetectionRate = useMemo(() => {
-    return isMouseClicked ? 10 : delay;
-  }, [delay, isMouseClicked]);
+    return isMouseClicked ? TILT_BASE_DETECTION_RATE : detectionRate;
+  }, [detectionRate, isMouseClicked]);
 
   const debouncedMouseHandler = useMemo(
     () => throttle(handleMouseMove, mouseDetectionRate),
@@ -94,7 +96,7 @@ root.render(
     <App
       baseHeight={500}
       baseWidth={500}
-      delay={100}
+      detectionRate={100}
       detectionRadius={500}
       horizontalCount={5}
       maxPillarHeight={200}
