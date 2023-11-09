@@ -65,6 +65,29 @@ export const App = ({
     setIsMouseClicked(false);
   }, []);
 
+  const cubes = useMemo(() => {
+    return Array.from(Array(verticalCount).keys()).map((y) =>
+      Array.from(Array(horizontalCount).keys()).map((x) => (
+        <li key={`${x}-${y}`} style={cubeWrapperStyle}>
+          <Cube
+            detectionRadius={detectionRadius}
+            isMouseClicked={isMouseClicked}
+            maxPillarHeight={maxPillarHeight}
+            mousePosition={mousePosition}
+          />
+        </li>
+      )),
+    );
+  }, [
+    cubeWrapperStyle,
+    detectionRadius,
+    horizontalCount,
+    isMouseClicked,
+    maxPillarHeight,
+    mousePosition,
+    verticalCount,
+  ]);
+
   return (
     <div
       className="app"
@@ -78,20 +101,7 @@ export const App = ({
         mousePosition={mousePosition}
         width={baseWidth}
       >
-        <>
-          {Array.from(Array(verticalCount).keys()).map((y) =>
-            Array.from(Array(horizontalCount).keys()).map((x) => (
-              <li key={`${x}-${y}`} style={cubeWrapperStyle}>
-                <Cube
-                  detectionRadius={detectionRadius}
-                  isMouseClicked={isMouseClicked}
-                  maxPillarHeight={maxPillarHeight}
-                  mousePosition={mousePosition}
-                />
-              </li>
-            )),
-          )}
-        </>
+        <>{cubes}</>
       </TiltBase>
     </div>
   );
