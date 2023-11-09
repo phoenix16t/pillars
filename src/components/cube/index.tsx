@@ -16,11 +16,11 @@ export const Cube = ({
   maxPillarHeight: number;
   mousePosition: MousePosition;
 }): JSX.Element => {
-  const [componentIsReady, setComponentIsReady] = useState(false);
+  const [isComponentReady, setIsComponentReady] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
   const coordinates = useMemo(() => {
-    if (!isMouseClicked && componentIsReady) {
+    if (!isMouseClicked && isComponentReady) {
       const obj = ref.current!.getBoundingClientRect();
       return {
         x: obj.x + obj.width / 2,
@@ -29,7 +29,7 @@ export const Cube = ({
     }
 
     return { x: 0, y: 0 };
-  }, [isMouseClicked, componentIsReady]);
+  }, [isMouseClicked, isComponentReady]);
 
   const percentage = useMemo(() => {
     if (!isMouseClicked) {
@@ -48,7 +48,7 @@ export const Cube = ({
   // note: this useEffect ensures that ref.current is populated before
   // the memos kick off
   useEffect(() => {
-    setComponentIsReady(true);
+    setIsComponentReady(true);
   }, []);
 
   return (
