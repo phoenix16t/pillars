@@ -1,5 +1,5 @@
 import { useState, useCallback, useMemo } from "react";
-import { throttle } from "lodash";
+import throttle from "lodash/throttle";
 
 import { TiltBase, Cube } from "components";
 
